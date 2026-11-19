@@ -37,7 +37,7 @@ namespace DonationHub.Domain.Entities
             };
 
         }
-        public void MakeItSucceeded(string receiptNumber,string receiptFileName)
+        public void MakeItSucceeded(string receiptNumber,string receiptFileName,DateTimeOffset time)
         {
             if (Status == DonationStatus.Succeeded || Status == DonationStatus.Failed)
                 throw new InvalidOperationException("A donation in a final state cannot be Updated.");
@@ -45,17 +45,17 @@ namespace DonationHub.Domain.Entities
             Status =DonationStatus.Succeeded;
             ReceiptNumber=receiptNumber;
             ReceiptFileName = receiptFileName;
-            CompletedAt=DateTimeOffset.UtcNow;
+            CompletedAt=time;
         }
 
-        public void MakeItFailed(string failureReason)
+        public void MakeItFailed(string failureReason,DateTimeOffset time)
         {
             if (Status == DonationStatus.Succeeded || Status == DonationStatus.Failed)
                 throw new InvalidOperationException("A donation in a final state cannot be Updated.");
 
             Status = DonationStatus.Failed;
             FailureReason=failureReason;
-            CompletedAt = DateTimeOffset.UtcNow;
+            CompletedAt = time;
         }
     }
 }

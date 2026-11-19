@@ -21,7 +21,7 @@ namespace DonationHub.Domain.Entities
         public DateTimeOffset ExpiresAt { get; private set; }
 
         public static IdempotencyRecord Create(string key, Guid userId, string requestHash,
-        int responseStatusCode,string responseBody,TimeSpan addedPeriod)
+        int responseStatusCode,string responseBody,TimeSpan addedPeriod,DateTimeOffset time)
         {
             if (string.IsNullOrWhiteSpace(key))
                 throw new ArgumentException(" key is required.", nameof(key));
@@ -36,8 +36,8 @@ namespace DonationHub.Domain.Entities
                 RequestHash= requestHash,
                 ResponseStatusCode= responseStatusCode,
                 ResponseBody= responseBody,
-                ExpiresAt= DateTimeOffset.UtcNow.Add(addedPeriod),
-                CreatedAt=DateTimeOffset.UtcNow
+                ExpiresAt= time.Add(addedPeriod),
+                CreatedAt=time
             };
         }
     }

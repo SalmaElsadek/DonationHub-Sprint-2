@@ -3,6 +3,7 @@ using DonationHub.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using DonationHub.Api.Common.Results;
 
 namespace DonationHub.Api.Controllers
 {
@@ -18,79 +19,46 @@ namespace DonationHub.Api.Controllers
         }
         // GET: api/categories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CategoryDTO>>> GetAll()
+        public async Task<IActionResult> GetAll(CancellationToken ct)
         {
-            var result = await _categoryService.GetAllAsync();
-            return Ok(result);
+            var result = await _categoryService.GetAllAsync(ct);
+            return result.ToActionResult();
         }
 
         // GET: api/categories/{id}
         [HttpGet("{id:guid}")]
-        public async Task<ActionResult<CategoryDTO>>GetById(Guid id)
+        public async Task<IActionResult> GetById(Guid id, CancellationToken ct)
         {
-            var result= await _categoryService.GetByIdAsync(id);
-            if(result==null) return NotFound(new { message = "Category.NotFound" });
-            return Ok(result);
+            var result= await _categoryService.GetByIdAsync(id,ct);
+            return result.ToActionResult();
         }
 
         // POST: api/categories
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<CategoryDTO>> Create([FromBody] CategoryDTO categoryDTO)
+        public async Task<IActionResult> Create([FromBody] CategoryDTO categoryDTO, CancellationToken ct)
         {
-            try
-            {
-                var result = await _categoryService.CreateAsync(categoryDTO);
-                return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+           
+            var result = await _categoryService.CreateAsync(categoryDTO,ct);
+            return result.ToActionResult(c => CreatedAtAction(nameof(GetById), new { id = c.Id }, c));
         }
 
         // PUT: api/categories/{id}
         [HttpPut("{id:guid}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] CategoryDTO categoryDto)
+        public async Task<IActionResult> Update(Guid id, [FromBody] CategoryDTO categoryDto, CancellationToken ct)
         {
-            try
-            {
-                await _categoryService.UpdateAsync(id, categoryDto);
-                return NoContent();
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound(new { message = "Category.NotFound" });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            var result = await _categoryService.GetByIdAsync(id, ct);
+            return result.ToActionResult(StatusCodes.Status204NoContent);
         }
 
         // DELETE: api/categories/{id} 
         [HttpDelete("{id:guid}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
         {
-            try
-            {
-                await _categoryService.DeleteAsync(id);
-                return NoContent();
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound(new { message = "Category.NotFound" });
-            }
-            catch (InvalidOperationException ex) when (ex.Message == "Category.HasCampaigns")
-            {
-                return Conflict(new { message = "Category.HasCampaigns" });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            var result = await _categoryService.DeleteAsync(id, ct);
+            return result.ToActionResult(StatusCodes.Status204NoContent);
         }
     }
 }

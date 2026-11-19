@@ -17,7 +17,7 @@ namespace DonationHub.Domain.Entities
         public string Type { get; private set; } = default!;
         public DateTimeOffset ProcessedAt { get; private set; }
 
-        public static ProcessedStripeEvent Create(string eventId, string type)
+        public static ProcessedStripeEvent Create(string eventId, string type,DateTimeOffset time)
         {
             if(string.IsNullOrWhiteSpace(eventId)) 
                 throw new ArgumentNullException("Event Id is required",nameof(eventId));
@@ -29,7 +29,7 @@ namespace DonationHub.Domain.Entities
             {
                 EventId = eventId,
                 Type = type,
-                ProcessedAt=DateTimeOffset.UtcNow
+                ProcessedAt=time
             };
         }
     }

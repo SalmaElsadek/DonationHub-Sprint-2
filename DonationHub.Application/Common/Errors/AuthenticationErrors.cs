@@ -7,7 +7,7 @@ using DonationHub.Application.Common.Results;
 
 namespace DonationHub.Application.Common.Errors
 {
-    public static class AuthErrors
+    public static class AuthenticationErrors
     {
         public static readonly Error InvalidCredentials = Error.Unauthorized(
             "Auth.InvalidCredentials",

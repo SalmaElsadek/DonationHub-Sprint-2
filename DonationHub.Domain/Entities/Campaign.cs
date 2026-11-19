@@ -63,6 +63,7 @@ namespace DonationHub.Domain.Entities
                 CreatedByUserId = createdByUserId,
                 Status = CampaignStatus.Active,
                 BannerFileName = bannerFileName,
+                UpdatedAt = time
             };
 
         }
@@ -74,11 +75,11 @@ namespace DonationHub.Domain.Entities
             if (endDate <= time) throw new ArgumentException("the new date should be in the future");
 
             EndDate = endDate;
-            UpdatedAt = DateTimeOffset.UtcNow;
+            UpdatedAt = time;
         }
 
         //GoalAmount cannot be lowered below the current RaisedAmount.
-        public void UpdateGoalAmount(Money goalAmount)
+        public void UpdateGoalAmount(Money goalAmount,DateTimeOffset time)
         {
             if (goalAmount.Amount <= 0)
                 throw new ArgumentException("The amount should be greater than 0", nameof(goalAmount));
@@ -86,7 +87,7 @@ namespace DonationHub.Domain.Entities
                 throw new ArgumentException("GoalAmount cannot be lowered below the current RaisedAmount.");
 
             GoalAmount = goalAmount;
-            UpdatedAt= DateTimeOffset.UtcNow;
+            UpdatedAt= time;
 
         }  
         public bool CanAcceptDonation(DateTimeOffset time)
@@ -103,17 +104,17 @@ namespace DonationHub.Domain.Entities
             if(money< 0) throw new ArgumentException("The Donation money should be positive",nameof(money));
 
             RaisedAmount += money;
-            UpdatedAt = DateTimeOffset.UtcNow;
+            UpdatedAt = now;
 
-            if (RaisedAmount >= GoalAmount.Amount) MakeItCompleted();
+            if (RaisedAmount >= GoalAmount.Amount) MakeItCompleted(now);
         }
 
-        public void MakeItCompleted()
+        public void MakeItCompleted(DateTimeOffset time)
         {
             if (Status == CampaignStatus.Completed || Status == CampaignStatus.Expired) return;
 
             Status = CampaignStatus.Completed;
-            UpdatedAt=DateTimeOffset.UtcNow;
+            UpdatedAt=time;
         }
         public void MakeItExpired(DateTimeOffset time)
         {
@@ -121,7 +122,7 @@ namespace DonationHub.Domain.Entities
             if (EndDate <= time)
             {
                 Status= CampaignStatus.Expired;
-                UpdatedAt= DateTimeOffset.UtcNow;
+                UpdatedAt= time;
             }
         }
         //A campaign that has donations cannot be hard-deleted

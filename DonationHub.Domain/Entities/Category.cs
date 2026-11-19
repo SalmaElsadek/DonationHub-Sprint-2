@@ -34,7 +34,7 @@ namespace DonationHub.Domain.Entities
                 NameEn = nameEn,
                 DescriptionAr = descriptionAr,
                 DescriptionEn = descriptionEn,
-                UpdatedAt = DateTimeOffset.UtcNow,
+                UpdatedAt = time,
             };
         }
         public void UpdateCreate(string nameAr, string nameEn, string descriptionAr, string descriptionEn, DateTimeOffset time)
@@ -45,14 +45,14 @@ namespace DonationHub.Domain.Entities
             NameEn = nameEn;
             DescriptionAr = descriptionAr;
             DescriptionEn = descriptionEn;
-            UpdatedAt = DateTimeOffset.UtcNow;
+            UpdatedAt = time;
             
         }
         //Rich Domain Model
             /*
             لو متأكدتش هنا اي كود في ال application layer 
             ممكن يعمل new category()
-            ممكن يدخل قيم غليط ومش هعرف انها غلط غير لما اجي اسجلها في الداتا بيز ووقتها ممكن ترمي اكسبشن
+            ممكن يدخل قيم غلط ومش هعرف انها غلط غير لما اجي اسجلها في الداتا بيز ووقتها ممكن ترمي اكسبشن
              */
         private static void ValidateName(string nameAr,string nameEn)
         {

@@ -22,19 +22,20 @@ namespace DonationHub.Infrastructure.Repositories
         public async Task<T> AddAsync(T entity, CancellationToken ct = default)
         {
             await _context.Set<T>().AddAsync(entity);
-            await _context.SaveChangesAsync(ct);
             return entity;
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync(CancellationToken ct = default) =>await _context.Set<T>().ToListAsync();
+        public async Task<IEnumerable<T>> GetAllAsync(CancellationToken ct = default) =>await _context.Set<T>().ToListAsync(ct);
 
         //public async Task<IEnumerable<Campaign>> GetAllIncludingDeletedAsync() => await _context.Set<Campaign>().IgnoreQueryFilters().ToListAsync();
 
-        public async Task<T?> GetByIdAsync(Guid id, CancellationToken ct = default) => await _context.Set<T>().FindAsync(id);
-       
-        public async Task Remove(Guid id)
+        public async Task<T?> GetByIdAsync(Guid id, CancellationToken ct = default) => await _context.Set<T>().FindAsync(id,ct);
+
+        public IQueryable<T> Query()=>_context.Set<T>().AsNoTracking();
+
+        public async Task Remove(Guid id,CancellationToken ct)
         {
-            var result = await _context.Set<T>().FindAsync(id);
+            var result = await _context.Set<T>().FindAsync(id,ct);
             if (result != null) _context.Set<T>().Remove(result);
 
             //await _context.SaveChangesAsync();

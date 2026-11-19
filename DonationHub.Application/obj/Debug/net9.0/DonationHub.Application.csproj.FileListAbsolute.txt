@@ -13,3 +13,4 @@ C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Application\obj\Debug\ne
 C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Application\obj\Debug\net9.0\refint\DonationHub.Application.dll
 C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Application\obj\Debug\net9.0\DonationHub.Application.pdb
 C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Application\obj\Debug\net9.0\ref\DonationHub.Application.dll
+C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Application\obj\Debug\net9.0\DonationHub.Application.sourcelink.json

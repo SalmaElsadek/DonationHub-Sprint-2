@@ -88,6 +88,8 @@ namespace DonationHub.Infrastructure.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("CreatedByUserId");
+
                     b.ToTable("Campaign", (string)null);
                 });
 
@@ -168,6 +170,8 @@ namespace DonationHub.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CampaignId");
+
+                    b.HasIndex("DonorUserId");
 
                     b.ToTable("Donations", (string)null);
                 });
@@ -521,6 +525,12 @@ namespace DonationHub.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("DonationHub.Infrastructure.Identity.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.OwnsOne("DonationHub.Domain.ValueObjects.Money", "GoalAmount", b1 =>
                         {
                             b1.Property<Guid>("CampaignId")
@@ -555,6 +565,12 @@ namespace DonationHub.Infrastructure.Migrations
                     b.HasOne("DonationHub.Domain.Entities.Campaign", null)
                         .WithMany()
                         .HasForeignKey("CampaignId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DonationHub.Infrastructure.Identity.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("DonorUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

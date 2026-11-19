@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DonationHub.Domain.Entities;
+using DonationHub.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -55,6 +56,11 @@ namespace DonationHub.Infrastructure.Data.Configurations
             builder.Property(c => c.RowVersion).IsRowVersion();
 
             builder.Property(c => c.IsDeleted).IsRequired();
+
+            builder.HasOne<ApplicationUser>()
+                .WithMany()
+                .HasForeignKey(c => c.CreatedByUserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

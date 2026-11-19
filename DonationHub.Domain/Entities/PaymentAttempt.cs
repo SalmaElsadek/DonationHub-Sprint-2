@@ -43,7 +43,7 @@ namespace DonationHub.Domain.Entities
             };
         }
 
-        public void MakeItSuccess(string stripePaymentIntentId)
+        public void MakeItSuccess(string stripePaymentIntentId,DateTimeOffset time)
         {
             if (Status == PaymentAttemptStatus.Succeeded) return;
 
@@ -52,17 +52,17 @@ namespace DonationHub.Domain.Entities
 
             StripePaymentIntentId = stripePaymentIntentId;
             Status = PaymentAttemptStatus.Succeeded;
-            UpdatedAt = DateTimeOffset.UtcNow;
+            UpdatedAt = time;
         }
 
-        public void MakeItFailed(string failureCode, string? stripePaymentIntentId=null)
+        public void MakeItFailed(string failureCode, DateTimeOffset time, string? stripePaymentIntentId=null)
         {
             if (Status == PaymentAttemptStatus.Succeeded) 
                 throw new InvalidOperationException("Can't Fail successful attempt");
 
             StripePaymentIntentId = stripePaymentIntentId;
             Status = PaymentAttemptStatus.Failed;
-            UpdatedAt = DateTimeOffset.UtcNow;
+            UpdatedAt = time;
             FailureCode= failureCode;
         }
     }

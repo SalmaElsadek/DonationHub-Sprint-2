@@ -1,4 +1,5 @@
 ﻿using DonationHub.Domain.Entities;
+using DonationHub.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -35,6 +36,10 @@ public class DonationConfiguration : IEntityTypeConfiguration<Donation>
         builder.HasOne<Campaign>()
             .WithMany()
             .HasForeignKey(d => d.CampaignId)
+            .OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne<ApplicationUser>()
+            .WithMany()
+            .HasForeignKey(d => d.DonorUserId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.Property(d => d.DonorUserId).IsRequired();

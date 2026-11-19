@@ -17,6 +17,7 @@ namespace DonationHub.Application.Interfaces
         Task<T?> GetByIdAsync(Guid id, CancellationToken ct = default);
         Task<T> AddAsync(T entity, CancellationToken ct = default);
         void Update(T entity);
-        Task Remove(Guid id);
+        Task Remove(Guid id, CancellationToken ct = default);
+        IQueryable<T> Query();
     }
 }

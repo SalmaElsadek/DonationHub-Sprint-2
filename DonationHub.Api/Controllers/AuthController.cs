@@ -1,4 +1,5 @@
-﻿using DonationHub.Infrastructure.Identity.DTOs;
+﻿using DonationHub.Api.Common.Results;
+using DonationHub.Infrastructure.Identity.DTOs;
 using DonationHub.Infrastructure.Identity.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,68 +19,39 @@ namespace DonationHub.Api.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<AuthDTO>> Register([FromBody] RegisterDTO model)
+        public async Task<IActionResult> Register([FromBody] RegisterDTO model, CancellationToken ct)
         {
-            try
-            {
-                var result = await _service.RegisterAsync(model);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                if(ex.Message== "Auth.EmailAlreadyExist")
-                    return Conflict(ex.Message);
-
-                return BadRequest(ex.Message);
-            }
+           
+             var result = await _service.RegisterAsync(model,ct);
+            return result.ToActionResult();
+              
         }
         [HttpPost("login")]
-        public async Task<ActionResult<AuthDTO>> Login([FromBody] LoginDTO model)
+        public async Task<IActionResult> Login([FromBody] LoginDTO model, CancellationToken ct)
         {
-            try
-            {
-                var result = await _service.LoginAsync(model);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                if (ex.Message == "Auth.InvalidCredentials")
-                    return Unauthorized(ex.Message);
-
-                if (ex.Message == "Auth.AccountDeactivated")
-                    return StatusCode(StatusCodes.Status403Forbidden, ex.Message);
-
-                return BadRequest(ex.Message);
-            }
+           
+            var result = await _service.LoginAsync(model,ct);
+            return result.ToActionResult();
+            
         }
 
         [HttpPost("refresh_token")]
-        public async Task<ActionResult<AuthDTO>> RefreshToken([FromBody] RefreshTokenDTO model)
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenDTO model, CancellationToken ct)
         {
-            try
-            {
-                var result = await _service.RefreshTokenAsync(model);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return Unauthorized(ex.Message);
-            }
+           var result=await _service.RefreshTokenAsync(model,ct);
+           return result.ToActionResult();
         }
 
         [HttpPost("revoke_token")]
-        public async Task<IActionResult> RevokeToken([FromBody] RefreshTokenDTO model)
+        public async Task<IActionResult> RevokeToken([FromBody] RefreshTokenDTO model, CancellationToken ct)
         {
             var revoked = await _service.RevokeTokenAsync(model.RefreshToken);
-            if (!revoked)
-                return BadRequest(new { message = "Token is invalid or already revoked" });
-
-            return Ok(new { message = "Token revoked successfully" });
+            return revoked.ToActionResult();
         }
 
         [Authorize]
         [HttpGet("me")]
-        public async Task<ActionResult<UserProfileDTO>> GetCurrentUser()
+        public async Task<IActionResult> GetCurrentUser(CancellationToken ct)
         {
             var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
@@ -87,8 +59,8 @@ namespace DonationHub.Api.Controllers
                 return Unauthorized();
             }
 
-            var profile = await _service.GetUserProfileAsync(userId);
-            return Ok(profile);
+            var profile = await _service.GetUserProfileAsync(userId,ct);
+            return profile.ToActionResult();
         }
     }
 }

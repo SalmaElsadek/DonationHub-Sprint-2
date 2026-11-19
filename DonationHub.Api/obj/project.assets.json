@@ -1814,7 +1814,8 @@
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
           "AutoMapper": "16.2.0",
-          "DonationHub.Domain": "1.0.0"
+          "DonationHub.Domain": "1.0.0",
+          "Microsoft.EntityFrameworkCore": "9.0.22"
         },
         "compile": {
           "bin/placeholder/DonationHub.Application.dll": {}

@@ -17,3 +17,4 @@ C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Infrastructure\obj\Debug
 C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Infrastructure\obj\Debug\net9.0\DonationHub.Infrastructure.pdb
 C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Infrastructure\obj\Debug\net9.0\DonationHub.Infrastructure.genruntimeconfig.cache
 C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Infrastructure\obj\Debug\net9.0\ref\DonationHub.Infrastructure.dll
+C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Infrastructure\obj\Debug\net9.0\DonationHub.Infrastructure.sourcelink.json
