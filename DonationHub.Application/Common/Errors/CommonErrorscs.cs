@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DonationHub.Application.Common.Errors
 {
-    internal class AppErrors
+    internal class CommonErrorscs
     {
     }
 }
