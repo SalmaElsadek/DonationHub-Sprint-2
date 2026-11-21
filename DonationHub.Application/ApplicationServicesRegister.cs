@@ -11,7 +11,10 @@ namespace DonationHub.Application
     {
         public static IServiceCollection AddApplicationService(this IServiceCollection services)
         {
-            services.AddAutoMapper(c => { }, typeof(ApplicationServicesRegister).Assembly);
+            var assembly = typeof(ApplicationServicesRegister).Assembly;
+
+            services.AddAutoMapper(c => { }, assembly);
+            services.AddMediatR(c => c.RegisterServicesFromAssembly(assembly));
             return services;
         }
     }
