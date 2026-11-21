@@ -81,6 +81,8 @@ namespace DonationHub.Domain.Entities
         //GoalAmount cannot be lowered below the current RaisedAmount.
         public void UpdateGoalAmount(Money goalAmount,DateTimeOffset time)
         {
+            if (Status == CampaignStatus.Completed || Status == CampaignStatus.Expired) 
+                throw new InvalidOperationException("Cannot update a completed or expired campaign.");
             if (goalAmount.Amount <= 0)
                 throw new ArgumentException("The amount should be greater than 0", nameof(goalAmount));
             if (goalAmount.Amount < RaisedAmount)
@@ -89,7 +91,45 @@ namespace DonationHub.Domain.Entities
             GoalAmount = goalAmount;
             UpdatedAt= time;
 
-        }  
+        }
+
+        public void Update(
+            string titleAr,
+            string titleEn,
+            string descriptionAr,
+            string descriptionEn,
+            Money goalAmount,
+            DateTimeOffset endDate,
+            Guid categoryId,
+            DateTimeOffset time)
+        {
+            if (Status == CampaignStatus.Completed || Status == CampaignStatus.Expired)
+                throw new InvalidOperationException("Cannot update a completed or expired campaign.");
+
+            if (endDate <= time)
+                throw new ArgumentException("End date must be in the future.", nameof(endDate));
+
+            if (goalAmount.Amount <= 0)
+                throw new ArgumentException("Goal amount must be greater than zero.", nameof(goalAmount));
+
+            if (goalAmount.Amount < RaisedAmount)
+                throw new ArgumentException("Goal amount cannot be lower than the raised amount.", nameof(goalAmount));
+
+            if (string.IsNullOrWhiteSpace(titleAr) || string.IsNullOrWhiteSpace(titleEn))
+                throw new ArgumentException("Titles are required.");
+
+            if (categoryId == Guid.Empty)
+                throw new ArgumentException("Category id is required.", nameof(categoryId));
+
+            TitleAr = titleAr;
+            TitleEn = titleEn;
+            DescriptionAr = descriptionAr;
+            DescriptionEn = descriptionEn;
+            GoalAmount = goalAmount;
+            EndDate = endDate;
+            CategoryId = categoryId;
+            UpdatedAt = time;
+        }
         public bool CanAcceptDonation(DateTimeOffset time)
         {
             if (Status == CampaignStatus.Active && EndDate > time && !IsDeleted) return true;

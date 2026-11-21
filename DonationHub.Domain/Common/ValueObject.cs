@@ -6,7 +6,7 @@ namespace DonationHub.Domain.Common
 {
     public abstract class ValueObject
     {
-        protected abstract IEnumerable<object> GetValues();
+        protected abstract IEnumerable<object?> GetValues();
 
         public override bool Equals(object? obj)
         {
