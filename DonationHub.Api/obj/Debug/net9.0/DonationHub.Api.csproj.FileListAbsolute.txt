@@ -185,3 +185,5 @@ C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Api\obj\Debug\net9.0\Don
 C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Api\obj\Debug\net9.0\ref\DonationHub.Api.dll
 C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Api\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Api\obj\Debug\net9.0\DonationHub.Api.sourcelink.json
+C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Api\bin\Debug\net9.0\MediatR.dll
+C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Api\bin\Debug\net9.0\MediatR.Contracts.dll

@@ -63,6 +63,7 @@ namespace DonationHub.Infrastructure.Data
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddSingleton(TimeProvider.System);
             services.AddScoped<ICampaignConcurrencyService, CampaignConcurrencyRepository>();
+            services.AddScoped<ICampaignReadRepository, CampaignReadRepository>();
             return services;
         }
     }
