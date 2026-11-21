@@ -1,6 +1,12 @@
 ﻿using DonationHub.Api.Common.Results;
+using DonationHub.Application.Features.Auth.Commands.Login;
+using DonationHub.Application.Features.Auth.Commands.RefreshToken;
+using DonationHub.Application.Features.Auth.Commands.Register;
+using DonationHub.Application.Features.Auth.Commands.RevokeToken;
+using DonationHub.Application.Features.Auth.Queries.GetCurrentUser;
 using DonationHub.Infrastructure.Identity.DTOs;
 using DonationHub.Infrastructure.Identity.Services;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,26 +17,40 @@ namespace DonationHub.Api.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthenticationService _service;
 
-        public AuthController(IAuthenticationService service)
+        //private readonly IAuthenticationService _service;
+
+        //public AuthController(IAuthenticationService service)
+        //{
+        //    _service = service;
+        //}
+
+        private readonly IMediator _mediator;
+        public AuthController(IMediator mediator)
         {
-            _service = service;
+            _mediator = mediator;
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO model, CancellationToken ct)
         {
-           
-             var result = await _service.RegisterAsync(model,ct);
+
+            var command = new RegisterCommand(
+                            model.FullName,
+                            model.Email,
+                            model.Password,
+                            model.PreferredLanguage);
+
+            var result = await _mediator.Send(command, ct);
             return result.ToActionResult();
               
         }
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO model, CancellationToken ct)
         {
-           
-            var result = await _service.LoginAsync(model,ct);
+
+            var command = new LoginCommand(model.Email, model.Password);
+            var result = await _mediator.Send(command, ct);
             return result.ToActionResult();
             
         }
@@ -38,14 +58,16 @@ namespace DonationHub.Api.Controllers
         [HttpPost("refresh_token")]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenDTO model, CancellationToken ct)
         {
-           var result=await _service.RefreshTokenAsync(model,ct);
-           return result.ToActionResult();
+            var command = new RefreshTokenCommand(model.RefreshToken);
+            var result = await _mediator.Send(command, ct);
+            return result.ToActionResult();
         }
 
         [HttpPost("revoke_token")]
         public async Task<IActionResult> RevokeToken([FromBody] RefreshTokenDTO model, CancellationToken ct)
         {
-            var revoked = await _service.RevokeTokenAsync(model.RefreshToken);
+            var command = new RevokeTokenCommand(model.RefreshToken);
+            var revoked = await _mediator.Send(command, ct);
             return revoked.ToActionResult();
         }
 
@@ -59,7 +81,7 @@ namespace DonationHub.Api.Controllers
                 return Unauthorized();
             }
 
-            var profile = await _service.GetUserProfileAsync(userId,ct);
+            var profile = await _mediator.Send(new GetCurrentUserQuery(userId), ct);
             return profile.ToActionResult();
         }
     }
