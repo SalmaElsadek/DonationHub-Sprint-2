@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using DonationHub.Application.Common.Behaviors;
 using DonationHub.Application.Interfaces;
 using DonationHub.Application.Options;
 using DonationHub.Application.Services;
@@ -11,6 +12,7 @@ using DonationHub.Infrastructure.Data.Interceptors;
 using DonationHub.Infrastructure.Identity;
 using DonationHub.Infrastructure.Identity.Services;
 using DonationHub.Infrastructure.Repositories;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -64,6 +66,10 @@ namespace DonationHub.Infrastructure.Data
             services.AddSingleton(TimeProvider.System);
             services.AddScoped<ICampaignConcurrencyService, CampaignConcurrencyRepository>();
             services.AddScoped<ICampaignReadRepository, CampaignReadRepository>();
+            services.AddMediatR(opt => {
+                opt.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+                opt.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            });
             return services;
         }
     }

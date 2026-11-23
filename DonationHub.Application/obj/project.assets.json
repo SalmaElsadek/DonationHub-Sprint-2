@@ -20,6 +20,19 @@
           }
         }
       },
+      "FluentValidation/12.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/FluentValidation.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/FluentValidation.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "MediatR/12.5.0": {
         "type": "package",
         "dependencies": {
@@ -355,6 +368,21 @@
         "lib/net9.0/AutoMapper.xml",
         "lib/netstandard2.0/AutoMapper.dll",
         "lib/netstandard2.0/AutoMapper.xml"
+      ]
+    },
+    "FluentValidation/12.2.0": {
+      "sha512": "DR3lFbdnKucaaj1/8zMNOACMz/64igzox1yVZSFVsLxYB5mxAB+wFP1WZ8fjwrZnbU1KA1DoMzHKYKxUfuZ4wQ==",
+      "type": "package",
+      "path": "fluentvalidation/12.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "fluent-validation-icon.png",
+        "fluentvalidation.12.2.0.nupkg.sha512",
+        "fluentvalidation.nuspec",
+        "lib/net8.0/FluentValidation.dll",
+        "lib/net8.0/FluentValidation.xml"
       ]
     },
     "MediatR/12.5.0": {
@@ -861,6 +889,7 @@
     "net9.0": [
       "AutoMapper >= 16.2.0",
       "DonationHub.Domain >= 1.0.0",
+      "FluentValidation >= 12.2.0",
       "MediatR >= 12.5.0",
       "Microsoft.EntityFrameworkCore >= 9.0.22"
     ]
@@ -922,6 +951,10 @@
           "AutoMapper": {
             "target": "Package",
             "version": "[16.2.0, )"
+          },
+          "FluentValidation": {
+            "target": "Package",
+            "version": "[12.2.0, )"
           },
           "MediatR": {
             "target": "Package",

@@ -187,3 +187,4 @@ C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Api\bin\Debug\net9.0\Mic
 C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Api\obj\Debug\net9.0\DonationHub.Api.sourcelink.json
 C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Api\bin\Debug\net9.0\MediatR.dll
 C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Api\bin\Debug\net9.0\MediatR.Contracts.dll
+C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Api\bin\Debug\net9.0\FluentValidation.dll

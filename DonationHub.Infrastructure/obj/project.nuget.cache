@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "BEayVZAjKEs=",
+  "dgSpecHash": "BcLLfUKZnGo=",
   "success": true,
   "projectFilePath": "C:\\Users\\selsa\\OneDrive\\Desktop\\DonationHub\\DonationHub.Infrastructure\\DonationHub.Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\selsa\\.nuget\\packages\\automapper\\16.2.0\\automapper.16.2.0.nupkg.sha512",
     "C:\\Users\\selsa\\.nuget\\packages\\azure.core\\1.41.0\\azure.core.1.41.0.nupkg.sha512",
     "C:\\Users\\selsa\\.nuget\\packages\\azure.identity\\1.12.1\\azure.identity.1.12.1.nupkg.sha512",
+    "C:\\Users\\selsa\\.nuget\\packages\\fluentvalidation\\12.2.0\\fluentvalidation.12.2.0.nupkg.sha512",
     "C:\\Users\\selsa\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\selsa\\.nuget\\packages\\mediatr\\12.5.0\\mediatr.12.5.0.nupkg.sha512",
     "C:\\Users\\selsa\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",
