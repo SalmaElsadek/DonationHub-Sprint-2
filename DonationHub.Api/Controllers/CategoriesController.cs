@@ -1,4 +1,5 @@
 ﻿using DonationHub.Api.Common.Results;
+using DonationHub.Application.Common.Results;
 using DonationHub.Application.DTOs;
 using DonationHub.Application.Features.Categories.Commands.CreateCategory;
 using DonationHub.Application.Features.Categories.Commands.DeleteCategory;
@@ -36,7 +37,7 @@ namespace DonationHub.Api.Controllers
         public async Task<IActionResult> GetAll(CancellationToken ct)
         {
             var result = await _mediator.Send(new GetAllCategoriesQuery(), ct);
-            return result.ToActionResult();
+            return HandleResult(result);
         }
 
         // GET: api/categories/{id}
@@ -44,7 +45,7 @@ namespace DonationHub.Api.Controllers
         public async Task<IActionResult> GetById(Guid id, CancellationToken ct)
         {
             var result = await _mediator.Send(new GetCategoryByIdQuery(id), ct);
-            return result.ToActionResult();
+            return result.IsSuccess ? Ok(result.Value) : result.ToProblemDetails(HttpContext);
         }
 
         // POST: api/categories
@@ -59,7 +60,10 @@ namespace DonationHub.Api.Controllers
                 categoryDTO.DescriptionEn
                 );
             var result = await _mediator.Send(command, ct);
-            return result.ToActionResult(c => CreatedAtAction(nameof(GetById), new { id = c.Id }, c));
+            if (result.IsFailure)
+                return result.ToProblemDetails(HttpContext);
+
+            return CreatedAtAction(nameof(GetById), new { id = result.Value.Id }, result.Value);
         }
 
         // PUT: api/categories/{id}
@@ -75,7 +79,7 @@ namespace DonationHub.Api.Controllers
                 categoryDto.DescriptionEn);
 
             var result = await _mediator.Send(command, ct);
-            return result.ToActionResult(StatusCodes.Status204NoContent);
+            return result.IsSuccess ? NoContent() : result.ToProblemDetails(HttpContext);
         }
 
         // DELETE: api/categories/{id} 
@@ -84,7 +88,11 @@ namespace DonationHub.Api.Controllers
         public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
         {
             var result = await _mediator.Send(new DeleteCategoryCommand(id), ct);
-            return result.ToActionResult(StatusCodes.Status204NoContent);
+            return result.IsSuccess ? NoContent() : result.ToProblemDetails(HttpContext);
         }
+
+        private IActionResult HandleResult<T>(Result<T> result)
+            => result.IsSuccess ? Ok(result.Value) : result.ToProblemDetails(HttpContext);
+
     }
 }

@@ -36,7 +36,7 @@ namespace DonationHub.Api.Controllers
                 AcceptLanguage = acceptLanguage
             };
             var result = await _mediator.Send(query, ct);
-            return result.ToActionResult();
+            return HandleResult(result);
         }
 
         //Get /api/campaigns/success-stories
@@ -51,7 +51,7 @@ namespace DonationHub.Api.Controllers
             };
 
             var result = await _mediator.Send(query, ct);
-            return result.ToActionResult();
+            return HandleResult(result);
         }
 
         // Get /api/campaigns/{id:guid}
@@ -73,7 +73,7 @@ namespace DonationHub.Api.Controllers
             };
 
             var result = await _mediator.Send(query, ct);
-            return result.ToActionResult();
+            return HandleResult(result);
         }
 
         //// Post /api/campaigns
@@ -91,6 +91,8 @@ namespace DonationHub.Api.Controllers
             var commandWithUser = command with { CreatedByUserId = userId };
 
             var result = await _mediator.Send(commandWithUser, ct);
+            if (result.IsFailure)
+                return result.ToProblemDetails(HttpContext);
             return CreatedAtAction(
                 nameof(GetById),
                 new { id = result.Value.Id },
@@ -109,7 +111,7 @@ namespace DonationHub.Api.Controllers
                 return BadRequest("Route ID does not match body ID.");
 
             var result = await _mediator.Send(command, ct);
-            return result.ToActionResult();
+            return HandleResult(result);
         }
 
         // Delete /api/campaigns/{id:guid}
@@ -121,7 +123,13 @@ namespace DonationHub.Api.Controllers
         {
             var command = new DeleteCampaignCommand(id);
             var result = await _mediator.Send(command, ct);
-            return result.ToActionResult();
+            return HandleResult(result);
         }
+
+        private IActionResult HandleResult<T>(Result<T> result)
+            => result.IsSuccess ? Ok(result.Value) : result.ToProblemDetails(HttpContext);
+
+        private IActionResult HandleResult(Result result)
+            => result.IsSuccess ? NoContent() : result.ToProblemDetails(HttpContext);
     }
 }

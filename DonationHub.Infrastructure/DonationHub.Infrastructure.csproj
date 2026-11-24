@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.22" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.22">
       <PrivateAssets>all</PrivateAssets>

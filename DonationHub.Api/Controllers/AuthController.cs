@@ -1,4 +1,5 @@
 ﻿using DonationHub.Api.Common.Results;
+using DonationHub.Application.Common.Results;
 using DonationHub.Application.Features.Auth.Commands.Login;
 using DonationHub.Application.Features.Auth.Commands.RefreshToken;
 using DonationHub.Application.Features.Auth.Commands.Register;
@@ -9,6 +10,7 @@ using DonationHub.Infrastructure.Identity.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DonationHub.Api.Controllers
@@ -42,8 +44,8 @@ namespace DonationHub.Api.Controllers
                             model.PreferredLanguage);
 
             var result = await _mediator.Send(command, ct);
-            return result.ToActionResult();
-              
+            return HandleResult(result);
+
         }
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO model, CancellationToken ct)
@@ -51,8 +53,8 @@ namespace DonationHub.Api.Controllers
 
             var command = new LoginCommand(model.Email, model.Password);
             var result = await _mediator.Send(command, ct);
-            return result.ToActionResult();
-            
+            return HandleResult(result);
+
         }
 
         [HttpPost("refresh_token")]
@@ -60,7 +62,7 @@ namespace DonationHub.Api.Controllers
         {
             var command = new RefreshTokenCommand(model.RefreshToken);
             var result = await _mediator.Send(command, ct);
-            return result.ToActionResult();
+            return HandleResult(result);
         }
 
         [HttpPost("revoke_token")]
@@ -68,7 +70,7 @@ namespace DonationHub.Api.Controllers
         {
             var command = new RevokeTokenCommand(model.RefreshToken);
             var revoked = await _mediator.Send(command, ct);
-            return revoked.ToActionResult();
+            return HandleResult(revoked);
         }
 
         [Authorize]
@@ -82,7 +84,13 @@ namespace DonationHub.Api.Controllers
             }
 
             var profile = await _mediator.Send(new GetCurrentUserQuery(userId), ct);
-            return profile.ToActionResult();
+            return HandleResult(profile);
         }
+
+        private IActionResult HandleResult<T>(Result<T> result)
+            => result.IsSuccess ? Ok(result.Value) : result.ToProblemDetails(HttpContext);
+
+        private IActionResult HandleResult(Result result)
+            => result.IsSuccess ? NoContent() : result.ToProblemDetails(HttpContext);
     }
 }

@@ -1,4 +1,5 @@
 using System.Text;
+using DonationHub.Api.Middleware;
 using DonationHub.Application;
 using DonationHub.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -29,7 +30,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 builder.Services.AddAuthorization();
 builder.Services.AddSwaggerGen();
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 var app = builder.Build();
+app.UseExceptionHandler();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

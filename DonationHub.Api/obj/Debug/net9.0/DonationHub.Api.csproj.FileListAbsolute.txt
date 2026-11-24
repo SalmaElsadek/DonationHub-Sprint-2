@@ -188,3 +188,4 @@ C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Api\obj\Debug\net9.0\Don
 C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Api\bin\Debug\net9.0\MediatR.dll
 C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Api\bin\Debug\net9.0\MediatR.Contracts.dll
 C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Api\bin\Debug\net9.0\FluentValidation.dll
+C:\Users\selsa\OneDrive\Desktop\DonationHub\DonationHub.Api\bin\Debug\net9.0\FluentValidation.DependencyInjectionExtensions.dll

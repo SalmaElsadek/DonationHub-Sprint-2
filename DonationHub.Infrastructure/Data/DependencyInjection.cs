@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using DonationHub.Application.Common.Behaviors;
+using DonationHub.Application.Features.Campaigns.Commands.CreateCampaign;
 using DonationHub.Application.Interfaces;
 using DonationHub.Application.Options;
 using DonationHub.Application.Services;
@@ -18,6 +20,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using FluentValidation;
 
 namespace DonationHub.Infrastructure.Data
 {
@@ -70,6 +73,7 @@ namespace DonationHub.Infrastructure.Data
                 opt.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
                 opt.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             });
+            services.AddValidatorsFromAssembly(typeof(CreateCampaignCommand).Assembly);
             return services;
         }
     }

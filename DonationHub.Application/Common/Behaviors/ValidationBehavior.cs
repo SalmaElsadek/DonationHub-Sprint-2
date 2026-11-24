@@ -23,12 +23,13 @@ namespace DonationHub.Application.Common.Behaviors
             CancellationToken cancellationToken)
         {
             if (!_validators.Any())
-                return await next();
-
-            var context = new ValidationContext<TRequest>(request);
+                return await next(cancellationToken);
+            //لو فيه اكتر من فاليدتور بتعدل داتا جوه الكونتكست ممكن تعمل مشكلة 
+            //var context = new ValidationContext<TRequest>(request);
 
             var results = await Task.WhenAll(
-                _validators.Select(v => v.ValidateAsync(context, cancellationToken)));
+            _validators.Select(v =>
+            v.ValidateAsync(new ValidationContext<TRequest>(request), cancellationToken)));
 
             var failures = results
                 .SelectMany(r => r.Errors)
@@ -61,7 +62,7 @@ namespace DonationHub.Application.Common.Behaviors
 
             if (typeof(TResponse) == typeof(Result))
             {
-                var result = Result.Failure(error);
+                var result = Result.Failure(error,errors);
                 return (TResponse)(object)result;
             }
 
