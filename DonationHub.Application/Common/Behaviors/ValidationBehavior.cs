@@ -24,7 +24,7 @@ namespace DonationHub.Application.Common.Behaviors
         {
             if (!_validators.Any())
                 return await next(cancellationToken);
-            //لو فيه اكتر من فاليدتور بتعدل داتا جوه الكونتكست ممكن تعمل مشكلة 
+            //لو فيه اكتر من واحد فاليدتور بتعدل داتا جوه الكونتكست ممكن تعمل مشكلة 
             //var context = new ValidationContext<TRequest>(request);
 
             var results = await Task.WhenAll(
@@ -67,22 +67,23 @@ namespace DonationHub.Application.Common.Behaviors
             }
 
             if (typeof(TResponse).IsGenericType &&
-                typeof(TResponse).GetGenericTypeDefinition() == typeof(Result<>))
+                 typeof(TResponse).GetGenericTypeDefinition() == typeof(Result<>))
             {
-                var type=typeof(TResponse).GetGenericArguments()[0];
+                var innerType = typeof(TResponse).GetGenericArguments()[0];
 
-                var failure = typeof(Result<>)
-                    .MakeGenericType(type)
-                    .GetMethod(
-                        nameof(Result<object>.Failure),
-                        BindingFlags.Public | BindingFlags.Static,
-                        binder: null,
-                        types: [typeof(Error), typeof(Dictionary<string, string[]>)],
-                        modifiers: null);
+                var failureMethod = typeof(Result)
+                    .GetMethods(BindingFlags.Public | BindingFlags.Static)
+                    .FirstOrDefault(m =>
+                        m.Name == nameof(Result.Failure) &&
+                        m.IsGenericMethodDefinition &&
+                        m.GetParameters().Length == 2 &&
+                        m.GetParameters()[0].ParameterType == typeof(Error) &&
+                        m.GetParameters()[1].ParameterType == typeof(Dictionary<string, string[]>));
 
-                if (failure is not null)
+                if (failureMethod is not null)
                 {
-                    var result = failure.Invoke(null, [error, errors]);
+                    var genericFailure = failureMethod.MakeGenericMethod(innerType);
+                    var result = genericFailure.Invoke(null, [error, errors]);
                     if (result is TResponse typedResult)
                         return typedResult;
                 }

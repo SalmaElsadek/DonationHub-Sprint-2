@@ -3,4 +3,8 @@
   <Project Path="DonationHub.Application/DonationHub.Application.csproj" />
   <Project Path="DonationHub.Domain/DonationHub.Domain.csproj" />
   <Project Path="DonationHub.Infrastructure/DonationHub.Infrastructure.csproj" />
+  <Project Path="DonationHub.UnitTests/DonationHub.UnitTests.csproj" Id="d3c6776a-93d3-40dc-a3e4-a8c38934df6b">
+    <BuildDependency Project="DonationHub.Application/DonationHub.Application.csproj" />
+    <BuildDependency Project="DonationHub.Domain/DonationHub.Domain.csproj" />
+  </Project>
 </Solution>
